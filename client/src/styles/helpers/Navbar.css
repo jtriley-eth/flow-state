@@ -1,0 +1,25 @@
+.nav {
+    width: 100vw;
+    box-sizing: border-box;
+    padding: 16px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    z-index: 2;
+    background-color: #fff;
+}
+
+.nav-brand {
+    font-size: 1.6em;
+    text-decoration: none;
+    color: #303030;
+    display: flex;
+    justify-content: center;
+    word-wrap: none;
+}
+
+.nav-logo {
+    width: 32px;
+    margin-right: 8px;
+}

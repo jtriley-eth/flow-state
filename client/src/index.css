@@ -1,0 +1,15 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: monospace;
+    max-width: 100vw;
+}
+
+main {
+    min-height: 100vh;
+    display: flex;
+}
+
