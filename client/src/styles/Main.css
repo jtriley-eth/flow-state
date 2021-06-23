@@ -2,26 +2,47 @@
     flex: 1;
     position: relative;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.main.auth {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.auth {
+.auth-card {
     background: #ffffff10;
     color: #fff;
     width: 250px;
     height: 250px;
     z-index: 1;
     backdrop-filter: blur(8px);
+    animation: fade-in 1s;
 }
 
 .main-section {
-    padding: 16px;
+    flex: 1;
+    box-sizing: border-box;
+    padding: 16px 0;
+}
+
+.main-section.top {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .main-card {
-    width: 200px;
-    height: 200px;
+    height: 100%;
+    box-sizing: border-box;
+    flex: 1;
+    margin: 0 16px;
+    animation: fade-up-in 1s ease-in;
 }
 
 .animate {
@@ -40,4 +61,26 @@
 .metamask:hover {
     transform: translateY(-2px);
     box-shadow: 6px 6px 6px rgba(0,0,0,0.5);
+}
+
+@keyframes fade-up-in {
+    0% {
+        transform: translateY(12px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        transform: scale(0.5, 0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1, 1);
+        opacity: 1;
+    }
 }
