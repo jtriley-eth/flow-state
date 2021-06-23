@@ -1,9 +1,13 @@
 .sidebar {
-    width: 10vw;
+    overflow: hidden;
     box-sizing: border-box;
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    box-shadow: 0 0 4px rgba(0,0,0,0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 8px;
+    background-color: #282828;
+    position: absolute;
+    right: 0;
+    height: calc(100vh - 72px);
+    transition: width 0.2s;
 }

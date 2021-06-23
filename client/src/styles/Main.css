@@ -1,0 +1,43 @@
+.main {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth {
+    background: #ffffff10;
+    color: #fff;
+    width: 250px;
+    height: 250px;
+    z-index: 1;
+    backdrop-filter: blur(8px);
+}
+
+.main-section {
+    padding: 16px;
+}
+
+.main-card {
+    width: 200px;
+    height: 200px;
+}
+
+.animate {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.metamask {
+    margin-top: 16px;
+    background-color: #383838;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.metamask:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 6px rgba(0,0,0,0.5);
+}

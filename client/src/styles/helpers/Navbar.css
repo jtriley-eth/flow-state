@@ -1,25 +1,35 @@
 .nav {
     width: 100vw;
     box-sizing: border-box;
-    padding: 16px 8px;
+    padding: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 0 8px rgba(0,0,0,0.5);
     z-index: 2;
-    background-color: #fff;
+    background-color:#303030;
 }
 
 .nav-brand {
-    font-size: 1.6em;
+    font-size: 1.4em;
     text-decoration: none;
-    color: #303030;
+    color: #f0f0f0;
     display: flex;
     justify-content: center;
     word-wrap: none;
+    transition: color 0.5s;
 }
 
 .nav-logo {
-    width: 32px;
-    margin-right: 8px;
+    width: 48px;
+    margin-right: 16px;
+    transition: transform 0.5s;
+}
+
+.nav-brand:hover {
+    color: #D57DFF;
+}
+
+.nav-brand:hover .nav-logo {
+    transform: rotateZ(-360deg);
 }
