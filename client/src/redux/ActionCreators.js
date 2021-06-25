@@ -19,18 +19,22 @@ const _getFlows = async address => {
     query {
         account(id: "${address}") {
             flowsOwned (orderBy: lastUpdate) {
+                id
                 sum
                 flowRate
                 lastUpdate
                 token { name }
+                owner { id }
                 recipient { id }
             }
             flowsReceived (orderBy: lastUpdate) {
+                id
                 sum
                 flowRate
                 lastUpdate
-                token
-                owner
+                token { name }
+                owner { id }
+                recipient { id }
             }
         }
     }
