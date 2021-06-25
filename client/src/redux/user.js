@@ -12,11 +12,13 @@ export const user = (state = initialState, action) => {
                 error: null,
                 account: action.payload
             })
+
         case ActionTypes.SET_ERROR:
             return ({
                 ...state,
                 error: action.payload
             })
+
         default: 
             return state
     }
