@@ -31,8 +31,9 @@ const Auth = ({ getUser }) => {
 }
 
 const Main = props => {
-    const { user, getUser, getFlows } = props
-    console.log(props)
+    const { user, getUser, getFlows, flows } = props
+    console.log(flows)
+
     useEffect(() => {
         if (user.account !== '') {
             getFlows(user.account)
@@ -50,7 +51,7 @@ const Main = props => {
                 <div className='card main-card'>
                     <Chart />
                 </div>
-                <div className='card main-card'>
+                <div id='flows-card' className='card main-card'>
                     <Flows />
                 </div>
             </section>

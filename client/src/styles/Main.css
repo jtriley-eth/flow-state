@@ -31,7 +31,6 @@
 
 .main-section {
     box-sizing: border-box;
-    padding: 16px 0;
 }
 
 .main-section.top {
@@ -43,16 +42,18 @@
     flex-wrap: wrap;
 }
 
-.main-section.bottom {
-    
-}
-
 .main-card {
+    flex: 1;
     min-width: 500px;
     min-height: 300px;
+    max-height: 300px;
     box-sizing: border-box;
-    margin: 0 16px;
+    margin: 16px;
     animation: fade-up-in 1s ease-in;
+}
+
+#flows-card {
+    overflow: scroll;
 }
 
 .animate {

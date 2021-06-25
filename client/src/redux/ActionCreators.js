@@ -15,6 +15,7 @@ const _getAddress = async () => {
 }
 
 const _getFlows = async address => {
+
     const query = `
     query {
         account(id: "${address}") {
@@ -23,7 +24,10 @@ const _getFlows = async address => {
                 sum
                 flowRate
                 lastUpdate
-                token { name }
+                token {
+                    name
+                    underlyingAddress
+                }
                 owner { id }
                 recipient { id }
             }
@@ -39,10 +43,18 @@ const _getFlows = async address => {
         }
     }
     `
+
     const client = new ApolloClient({
         uri: superfluidGoerliUrl,
         cache: new InMemoryCache()
     })
+
+    const sf = new SuperfluidSDK.Framework({
+        ethers: new Web3Provider(window.ethereum)
+    })
+
+    await sf.initialize()
+
     const flows = client.query ({ query: gql(query) })
         .then(data => {
             const { flowsOwned, flowsReceived } = data.data.account

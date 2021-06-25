@@ -1,5 +1,5 @@
 .flows {
-    overflow: scroll;
+    
 }
 
 .flows-header {
@@ -8,21 +8,31 @@
 }
 
 .flows-list {
-    background-color: hsl(0, 0%, 19%);
     margin-top: 16px;
-    padding: 8px;
+    padding-left: 4px;
     border-radius: 4px;
-    border: 1px solid #484848;
+    box-sizing: border-box;
+}
+
+.flows-list.inflow {
+    border-left: 2px solid #7DFFC0;
+}
+
+.flows-list.outflow {
+    border-left: 2px solid #FF8D7D;
+}
+
+.flows-item-container {
+    padding: 8px;
+    border: 1px solid #888;
+    border-radius: 4px;
+    margin: 8px 0;
 }
 
 .flows-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px;
-    border: 1px solid #888;
-    border-radius: 4px;
-    margin: 8px;
 }
 
 .flows-address-container {
@@ -34,7 +44,8 @@
     border-radius: 4px;
 }
 
-.flows-address {
+.flows-item-data {
     margin-left: 8px;
     font-size: 0.8em;
+    color: #f0f0f0;
 }

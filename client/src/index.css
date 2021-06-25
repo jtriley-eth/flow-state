@@ -5,6 +5,7 @@ primary: #D57DFF
 secondary: #7DB1FF
 ternary: #9889FF
 highlight: #7DFFC0
+error: #FF8D7D
 
 */
 
@@ -67,4 +68,21 @@ main {
 .button-text {
     color: #303030;
     font-weight: bold;
+}
+
+.loader {
+    animation: load 3.5s linear infinite;
+    width: 128px;
+}
+
+@keyframes load {
+    0%{
+        transform: rotateZ(0) scale(1, 1);
+    }
+    50% {
+        transform: rotateZ(-360deg) scale(0.95, 0.95);
+    }
+    100%{
+        transform: rotateZ(-720deg) scale(1, 1);
+    }
 }
