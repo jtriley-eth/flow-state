@@ -1,37 +1,38 @@
 import React from 'react'
+import '../../styles/helpers/Hamburger.css'
 
 const Hamburger = props => {
-    const { toggleMenu } = props
+    const { toggleMenu, showMenu } = props
     return (
-        <svg
-            width="32"
-            height="21"
-            viewBox="0 0 256 168"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+        <div
+            className='hamburger'
             onClick={() => toggleMenu()}
         >
-            <rect
-                y="72"
-                width="256"
-                height="24"
-                rx="12"
-                fill="#f0f0f0"
+            <div
+                className={
+                    showMenu ?
+                        'hamburger-bar x-rect1'
+                    :
+                        'hamburger-bar hamburger-rect1'
+                }
             />
-            <rect
-                width="256"
-                height="24"
-                rx="12"
-                fill="#f0f0f0"
+            <div
+                className={
+                    showMenu ?
+                        'hamburger-bar x-rect2'
+                    :
+                        'hamburger-bar hamburger-rect2'
+                }
             />
-            <rect
-                y="144"
-                width="256"
-                height="24"
-                rx="12"
-                fill="#f0f0f0"
+            <div
+                className={
+                    showMenu ?
+                        'hamburger-bar x-rect3'
+                    :
+                        'hamburger-bar hamburger-rect3'
+                }
             />
-        </svg>
+        </div>
     )
 }
 

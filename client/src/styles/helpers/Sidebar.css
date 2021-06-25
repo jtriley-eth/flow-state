@@ -7,7 +7,6 @@
     align-items: center;
     background-color: #282828;
     position: absolute;
-    right: 0;
     height: calc(100vh - 72px);
     transition: width 0.2s;
 }

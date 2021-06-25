@@ -1,32 +1,51 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { getUser, getFlows } from '../redux/ActionCreators'
 import AnimationCanvas from './helpers/AnimationCanvas'
 import Chart from './helpers/Chart'
 import Flows from './helpers/Flows'
 import History from './helpers/History'
 import '../styles/Main.css'
 
-const Main = props => {
-    const { account, getAddress } = props
-
-    if (!account) {
-        return (
-            <div className='main auth'>
-                <div className='animate'>
-                    <AnimationCanvas/>
+const Auth = ({ getUser }) => {
+    return (
+        <div className='main auth'>
+            <div className='animate'>
+                <AnimationCanvas/>
+            </div>
+            <div className='card auth-card'>
+                <div className='card-header'>
+                    <h2>Flow State</h2>
                 </div>
-                <div className='card auth-card'>
-                    <div className='card-header'>
-                        <h2>Connect Wallet</h2>
-                    </div>
-                    <div
-                        className='card metamask'
-                        onClick={() => getAddress()}
-                    >
-                        <h3>MetaMask</h3>
+                <p className='auth-p'>A Superfluid Flow Management Dashboard</p>
+
+                <div className='card connect-wallet'>
+                    <h3>Connect Wallet</h3>
+                    <div className='divider'/>
+                    <div className='supported-wallet' onClick={() => getUser()}>
+                        <h4 className='supported-wallet-h2'>Metamask</h4>
                     </div>
                 </div>
             </div>
-        )
+        </div>
+    )
+}
+
+const Main = props => {
+    const { user, getUser, getFlows } = props
+    const { flows } = props.flows
+    console.log(props)
+
+    useEffect(() => {
+        if (user.account !== '') {
+            getFlows(user.account)
+        }
+    // eslint-disable-next-line
+    }, [user])
+    // console.log(flows.outFlows)
+
+    if (!user.account) {
+        return <Auth getUser={getUser} />
     }
 
     return (
@@ -39,7 +58,7 @@ const Main = props => {
                     <Flows />
                 </div>
             </section>
-            <section className='main-section'>
+            <section className='main-section bottom'>
                 <div className='card main-card'>
                     <History />
                 </div>
@@ -48,4 +67,13 @@ const Main = props => {
     )
 }
 
-export default Main
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+        flows: state.flows
+    }
+}
+
+const mapDispatchToProps = { getUser, getFlows }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main)

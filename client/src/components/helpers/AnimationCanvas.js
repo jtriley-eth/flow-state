@@ -1,9 +1,10 @@
 import React, { Suspense, useCallback, useMemo, useRef } from 'react'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { Canvas, extend, useFrame, useLoader, useThree } from '@react-three/fiber'
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import * as THREE from 'three'
 import node from '../../assets/node.png'
 
+/*
 extend({ OrbitControls })
 const CameraControls = () => {
     const { camera, gl: { domElement } } = useThree()
@@ -20,6 +21,7 @@ const CameraControls = () => {
         />
     )
 }
+*/
 
 const Points = () => {
     const imgTex = useLoader(THREE.TextureLoader, node)

@@ -41,3 +41,30 @@ main {
     margin-bottom: 8px;
     border-bottom: 2px solid #888;
 }
+
+.divider {
+    height: 2px;
+    background-color: #888;
+}
+
+.button {
+    padding: 8px;
+    background-color: #9889FF;
+    border: none;
+    border-radius: 2px;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.button:hover {
+    box-shadow: 2px 2px 2px #000;
+    transform: translateY(-2px);
+}
+
+.button:focus {
+    outline: none;
+}
+
+.button-text {
+    color: #303030;
+    font-weight: bold;
+}

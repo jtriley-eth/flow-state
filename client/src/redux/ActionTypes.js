@@ -1,0 +1,5 @@
+export const GET_FLOWS = 'GET_FLOWS'
+export const UPDATE_FLOW = 'UPDATE_FLOW'
+export const ADD_FLOW = 'ADD_FLOW'
+export const SET_USER = 'SET_USER'
+export const SET_ERROR = 'SET_ERROR'

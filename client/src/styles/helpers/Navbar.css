@@ -11,13 +11,9 @@
 }
 
 .nav-brand {
-    font-size: 1.4em;
-    text-decoration: none;
-    color: #f0f0f0;
+    flex: 1;
     display: flex;
     justify-content: center;
-    word-wrap: none;
-    transition: color 0.5s;
 }
 
 .nav-logo {
@@ -26,8 +22,11 @@
     transition: transform 0.5s;
 }
 
-.nav-brand:hover {
-    color: #D57DFF;
+.nav-button {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 .nav-brand:hover .nav-logo {
