@@ -8,7 +8,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
 }
 
@@ -23,6 +23,10 @@
 
 .auth-p {
     margin-bottom: 16px;
+}
+
+.connect-wallet {
+    padding-bottom: 16px;
 }
 
 .main-section {
@@ -56,12 +60,6 @@
     top: 0;
     height: 100%;
     width: 100%;
-}
-
-.connect-wallet {
-    margin: 16px;
-    background-color: #383838;
-    padding-bottom: 16px;
 }
 
 .supported-wallet {

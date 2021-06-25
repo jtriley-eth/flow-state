@@ -17,32 +17,28 @@ const Auth = ({ getUser }) => {
                 <div className='card-header'>
                     <h2>Flow State</h2>
                 </div>
-                <p className='auth-p'>A Superfluid Flow Management Dashboard</p>
-
-                <div className='card connect-wallet'>
-                    <h3>Connect Wallet</h3>
-                    <div className='divider'/>
+                <p className='auth-p'>A Superfluid Flow Management Dashboard.</p>
+                <p className='auth-p'>Connect a wallet to continue.</p>
+                <div className='connect-wallet'>
                     <div className='supported-wallet' onClick={() => getUser()}>
                         <h4 className='supported-wallet-h2'>Metamask</h4>
                     </div>
                 </div>
             </div>
+            <div/>
         </div>
     )
 }
 
 const Main = props => {
     const { user, getUser, getFlows } = props
-    const { flows } = props.flows
     console.log(props)
-
     useEffect(() => {
         if (user.account !== '') {
             getFlows(user.account)
         }
     // eslint-disable-next-line
     }, [user])
-    // console.log(flows.outFlows)
 
     if (!user.account) {
         return <Auth getUser={getUser} />
