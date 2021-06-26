@@ -55,19 +55,19 @@ const FlowListItem = props => {
             {
                 collapsed ? null :
                 <div style={{marginTop: 8}}>
-                    <p style={{color: '#D57DFF'}}>
+                    <p className='flows-item-label'>
                         Token:
                         <span className='flows-item-data'>
                             {flow.token.name}
                         </span>
                     </p>
-                    <p style={{color: '#D57DFF'}}>
+                    <p className='flows-item-label'>
                         Flow Rate:
                         <span className='flows-item-data'>
-                            {flow.flowRate * 10e-18} / Second
+                            {flow.flowRate * 10e-18} {flow.token.symbol}/ Second
                         </span>
                     </p>
-                    <p style={{color: '#D57DFF'}}>
+                    <p className='flows-item-label'>
                         Tokens Streamed:
                         <StreamVisual
                             lastUpdate={flow.lastUpdate}

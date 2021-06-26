@@ -31,8 +31,7 @@ const Auth = ({ getUser }) => {
 }
 
 const Main = props => {
-    const { user, getUser, getFlows, flows } = props
-    console.log(flows)
+    const { user, getUser, getFlows/*, flows*/ } = props
 
     useEffect(() => {
         if (user.account !== '') {

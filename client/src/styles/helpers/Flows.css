@@ -44,6 +44,11 @@
     border-radius: 4px;
 }
 
+.flows-item-label {
+    color: #D57DFF;
+    padding-top: 8px;
+}
+
 .flows-item-data {
     margin-left: 8px;
     font-size: 0.8em;

@@ -13,12 +13,11 @@ const _getAddress = async () => {
         alert('Error: You need a web 3.0 provider to perform this action')
     }
 }
-
+// 0x42d68d4e81087e43e70f6fd56be4ee356da3a3ac
 const _getFlows = async address => {
-
     const query = `
     query {
-        account(id: "${address}") {
+        account(id: "0x42d68d4e81087e43e70f6fd56be4ee356da3a3ac") {
             flowsOwned (orderBy: lastUpdate) {
                 id
                 sum
@@ -26,19 +25,48 @@ const _getFlows = async address => {
                 lastUpdate
                 token {
                     name
+                    symbol
                     underlyingAddress
                 }
-                owner { id }
-                recipient { id }
+                owner {
+                    id
+                }
+                recipient {
+                    id
+                }
+                events {
+                    id
+                    oldFlowRate
+                    flowRate
+                    transaction {
+                        timestamp
+                    }
+                }
             }
             flowsReceived (orderBy: lastUpdate) {
                 id
                 sum
                 flowRate
                 lastUpdate
-                token { name }
-                owner { id }
-                recipient { id }
+                token {
+                    name
+                    symbol
+                    underlyingAddress
+                }
+                owner {
+                    id
+                }
+                recipient {
+                    id
+                }
+                events {
+                    id
+                    oldFlowRate
+                    flowRate
+                    transaction {
+                        timestamp
+                    }
+                }
             }
         }
     }
@@ -58,12 +86,17 @@ const _getFlows = async address => {
     const flows = client.query ({ query: gql(query) })
         .then(data => {
             const { flowsOwned, flowsReceived } = data.data.account
+            console.log(data.data.account)
             return ({
                 inFlows: flowsReceived,
                 outFlows: flowsOwned
             })
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+            console.log(error)
+            return ({ inFlows: [], outFlows: [] })
+        })
+
     return flows
 }
 
