@@ -17,7 +17,7 @@ const _getAddress = async () => {
 const _getFlows = async address => {
     const query = `
     query {
-        account(id: "0x42d68d4e81087e43e70f6fd56be4ee356da3a3ac") {
+        account(id: "${address}") {
             flowsOwned (orderBy: lastUpdate) {
                 id
                 sum
