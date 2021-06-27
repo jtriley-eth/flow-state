@@ -17,7 +17,7 @@ const Navbar = props => {
                 :
                     null
             }
-            <Link to='/' className='nav-brand'>
+            <Link to='/' className='nav-brand noselect'>
                 <img src={Logo} alt='logo' className='nav-logo'/>
             </Link>
             {

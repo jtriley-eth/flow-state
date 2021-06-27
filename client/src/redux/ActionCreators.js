@@ -1,8 +1,8 @@
 import * as ActionTypes from './ActionTypes'
-import SuperfluidSDK from '@superfluid-finance/js-sdk'
-import { Web3Provider } from '@ethersproject/providers'
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
-import { superfluidGoerliUrl, fDAIx } from '../constants/thegraph'
+import { superfluidGoerliUrl } from '../constants/thegraph'
+// import SuperfluidSDK from '@superfluid-finance/js-sdk'
+// import { Web3Provider } from '@ethersproject/providers'
 
 const _getAddress = async () => {
     if (typeof window.ethereum !== 'undefined') {
@@ -13,7 +13,7 @@ const _getAddress = async () => {
         alert('Error: You need a web 3.0 provider to perform this action')
     }
 }
-// 0x42d68d4e81087e43e70f6fd56be4ee356da3a3ac
+
 const _getFlows = async address => {
     const query = `
     query {
@@ -34,14 +34,6 @@ const _getFlows = async address => {
                 recipient {
                     id
                 }
-                events {
-                    id
-                    oldFlowRate
-                    flowRate
-                    transaction {
-                        timestamp
-                    }
-                }
             }
             flowsReceived (orderBy: lastUpdate) {
                 id
@@ -59,13 +51,97 @@ const _getFlows = async address => {
                 recipient {
                     id
                 }
+            }
+        }
+    }
+    `
+
+    const client = new ApolloClient({
+        uri: superfluidGoerliUrl,
+        cache: new InMemoryCache()
+    })
+
+    return client.query({ query: gql(query) })
+        .then(data => {
+            const inFlows = data.data.account.flowsReceived
+            const outFlows = data.data.account.flowsOwned
+            return ({
+                inFlows,
+                outFlows
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            return ({ inFlows: [], outFlows: [] })
+        })
+}
+
+const _getEvents = async address => {
+    const query = `
+    query {
+        account(id: "${address}") {
+            flowsOwned (orderBy: lastUpdate) {
+                sum
+                token {
+                    name
+                    symbol
+                    underlyingAddress
+                }
                 events {
-                    id
                     oldFlowRate
                     flowRate
                     transaction {
                         timestamp
                     }
+                }
+                owner {
+                    id
+                }
+                recipient {
+                    id
+                }
+            }
+            flowsReceived (orderBy: lastUpdate) {
+                sum
+                token {
+                    name
+                    symbol
+                    underlyingAddress
+                }
+                events {
+                    oldFlowRate
+                    flowRate
+                    transaction {
+                        timestamp
+                    }
+                }
+                owner {
+                    id
+                }
+                recipient {
+                    id
+                }
+            }
+            upgradeEvents {
+                amount
+                transaction {
+                    timestamp
+                }
+                token {
+                    name
+                    symbol
+                    underlyingAddress
+                }
+            }
+            downgradeEvents {
+                amount
+                transaction {
+                    timestamp
+                }
+                token {
+                    name
+                    symbol
+                    underlyingAddress
                 }
             }
         }
@@ -77,43 +153,69 @@ const _getFlows = async address => {
         cache: new InMemoryCache()
     })
 
-    const sf = new SuperfluidSDK.Framework({
-        ethers: new Web3Provider(window.ethereum)
-    })
-
-    await sf.initialize()
-
-    const flows = client.query ({ query: gql(query) })
+    return client.query({ query: gql(query) })
         .then(data => {
-            const { flowsOwned, flowsReceived } = data.data.account
-            console.log(data.data.account)
-            return ({
-                inFlows: flowsReceived,
-                outFlows: flowsOwned
+            const {
+                flowsOwned,
+                flowsReceived,
+                upgradeEvents,
+                downgradeEvents
+            } = data.data.account
+
+            let events = []
+
+            flowsOwned.forEach(flow => {
+                const flowEvents = flow.events.map(event => ({
+                    type: 'flow',
+                    sum: event.sum,
+                    timestamp: event.transaction.timestamp,
+                    oldFlowRate: event.oldFlowRate,
+                    newFlowRate: event.flowRate,
+                    token: flow.token,
+                    sender: event.owner,
+                    receiver: event.recipient
+                }))
+                events = events.concat(flowEvents)
             })
+
+            flowsReceived.forEach(flow => {
+                const flowEvents = flow.events.map(event => ({
+                    type: 'flow',
+                    sum: event.sum,
+                    timestamp: event.transaction.timestamp,
+                    oldFlowRate: event.oldFlowRate,
+                    newFlowRate: event.flowRate,
+                    token: flow.token,
+                    sender: event.owner,
+                    receiver: event.recipient
+                }))
+                events = events.concat(flowEvents)
+            })
+
+            const upEvents = upgradeEvents.map(event => ({
+                type: 'upgrade',
+                amount: event.amount,
+                timestamp: event.transaction.timestamp,
+                token: event.token
+            }))
+            events = events.concat(upEvents)
+
+            const downEvents = downgradeEvents.map(event => ({
+                type: 'downgrade',
+                amount: event.amount,
+                timestamp: event.transcation.timestamp,
+                token: event.token
+            }))
+            events = events.concat(downEvents)
+
+            events.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp))
+
+            return events
         })
         .catch(error => {
             console.log(error)
-            return ({ inFlows: [], outFlows: [] })
+            return []
         })
-
-    return flows
-}
-
-const _newFlow = async (sender, recipient, flowRate) => {
-    // superfluid logic
-    const sf = new SuperfluidSDK.Framework({
-        ethers: new Web3Provider(window.ethereum)
-    })
-    await sf.initialize()
-    const user = sf.user({
-        address: sender,
-        token: fDAIx
-    })
-    await user.flow({
-        recipient: recipient,
-        flowRate: flowRate
-    })
 }
 
 export const getUser = () => dispatch => {
@@ -133,9 +235,10 @@ export const getFlows = address => dispatch => {
     })
 }
 
-export const setNewFlow = (sender, recipient, flowRate) => dispatch => {
-    _newFlow(sender, recipient, flowRate)
-        .then(flow => dispatch({ type: ActionTypes.ADD_FLOW, payload: flow }))
+export const getEvents = address => dispatch => {
+    _getEvents(address).then(events => {
+        dispatch({ type: ActionTypes.GET_EVENTS, payload: events })
+    })
 }
 
 const setError = error => ({

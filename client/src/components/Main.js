@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { getUser, getFlows } from '../redux/ActionCreators'
+import { getUser, getFlows, getEvents } from '../redux/ActionCreators'
 import AnimationCanvas from './helpers/AnimationCanvas'
 import Chart from './helpers/Chart'
 import Flows from './helpers/Flows'
@@ -31,14 +31,18 @@ const Auth = ({ getUser }) => {
 }
 
 const Main = props => {
-    const { user, getUser, getFlows/*, flows*/ } = props
+    const { user, getUser, getFlows, getEvents } = props
+
+    const initialize = useCallback(address => {
+        getFlows(address)
+        getEvents(address)
+    }, [getFlows, getEvents])
 
     useEffect(() => {
         if (user.account !== '') {
-            getFlows(user.account)
+            initialize(user.account)
         }
-    // eslint-disable-next-line
-    }, [user])
+    }, [user.account, initialize])
 
     if (!user.account) {
         return <Auth getUser={getUser} />
@@ -65,11 +69,14 @@ const Main = props => {
 
 const mapStateToProps = state => {
     return {
-        user: state.user,
-        flows: state.flows
+        user: state.user
     }
 }
 
-const mapDispatchToProps = { getUser, getFlows }
+const mapDispatchToProps = {
+    getUser,
+    getFlows,
+    getEvents
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)

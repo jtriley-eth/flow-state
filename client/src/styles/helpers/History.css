@@ -1,12 +1,23 @@
+.history-table {
+    border-collapse: collapse;
+}
+
 .history-thead {
-    background-color: #9889FF;
+    border-bottom: 2px solid #888;
 }
 
 .history-th {
+    background-color: #9889FF;
     color: #303030;
-    border: 1px solid #888;
-    box-sizing: border-box;
     padding: 8px;
+}
+
+.history-th.flow-event:first-child {
+    border-left: 2px solid #7DFFC0;
+}
+
+.history-th.flow-event:last-child {
+    border-right: 2px solid #7DFFC0;
 }
 
 .history-tbody {
