@@ -172,8 +172,8 @@ const _getEvents = async address => {
                     oldFlowRate: event.oldFlowRate,
                     newFlowRate: event.flowRate,
                     token: flow.token,
-                    sender: event.owner,
-                    receiver: event.recipient
+                    sender: flow.owner.id,
+                    receiver: flow.recipient.id
                 }))
                 events = events.concat(flowEvents)
             })
@@ -186,8 +186,8 @@ const _getEvents = async address => {
                     oldFlowRate: event.oldFlowRate,
                     newFlowRate: event.flowRate,
                     token: flow.token,
-                    sender: event.owner,
-                    receiver: event.recipient
+                    sender: flow.owner.id,
+                    receiver: flow.recipient.id
                 }))
                 events = events.concat(flowEvents)
             })

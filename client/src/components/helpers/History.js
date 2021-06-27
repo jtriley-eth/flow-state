@@ -5,7 +5,19 @@ import { connect } from 'react-redux'
 
 const History = props => {
     const { events } = props.user
-    console.log(events)
+
+    const shortAddr = address => {
+        const start = address.substring(0, 5)
+        const end = address.substring(address.length - 5, address.length)
+        return `${start}..${end}`
+    }
+
+    const getDate = timestamp => {
+        const jsTimestamp = new Date(parseInt(timestamp) * 1000)
+        return (
+            `${jsTimestamp.getDate()} ${jsTimestamp.toLocaleString('default', { month: 'short' })}, ${jsTimestamp.getFullYear()}`
+        )
+    }
 
     return (
         <div
@@ -27,19 +39,55 @@ const History = props => {
                         </tr>
                     </thead>
                     <tbody className='history-body'>
-                        <tr>
-                            <td className='history-td'>
-                                timestamp
-                            </td>
-                            <td className='history-td'>token</td>
-                            <td className='history-td'>type</td>
-                            <td className='history-td'>oldFlowRate</td>
-                            <td className='history-td'>newFlowRate</td>
-                            <td className='history-td'>sender</td>
-                            <td className='history-td'>receiver</td>
-                            <td className='history-td'>amount</td>
-
-                        </tr>
+                        {
+                            events ?
+                            events.map(event => {
+                                const isFlow = event.type === 'flow'
+                                const isUpgrade = event.type === 'upgrade'
+                                return (
+                                    <tr className='history-tbody-r'>
+                                        <td className='history-td'>
+                                            {getDate(event.timestamp)}
+                                        </td>
+                                        <td className='history-td'>
+                                            {event.token.symbol}
+                                        </td>
+                                        <td className='history-td'>
+                                            {event.type}
+                                        </td>
+                                        <td className='history-td flow-td'>
+                                            {isFlow ? event.oldFlowRate * 10e-18 : '-'}
+                                        </td>
+                                        <td className='history-td flow-td'>
+                                            {isFlow ? event.newFlowRate * 10e-18 : '-'}
+                                        </td>
+                                        <td className='history-td flow-td'>
+                                            {isFlow ? shortAddr(event.sender) : '-'}
+                                        </td>
+                                        <td className='history-td flow-td'>
+                                            {isFlow ? shortAddr(event.receiver) : '-'}
+                                        </td>
+                                        <td className='history-td grade-td'>
+                                            {isFlow ? '-' : (isUpgrade ? event.amount * 10e-18 : `-${event.amount}`)}
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                            :
+                            <tr className='history-tbody-r'>
+                                <td className='history-td'>
+                                    timestamp
+                                </td>
+                                <td className='history-td'>token</td>
+                                <td className='history-td'>type</td>
+                                <td className='history-td flow-td'>oldFlowRate</td>
+                                <td className='history-td flow-td'>newFlowRate</td>
+                                <td className='history-td flow-td'>sender</td>
+                                <td className='history-td flow-td'>receiver</td>
+                                <td className='history-td grade-td'>amount</td>
+                            </tr>
+                            
+                        }
                     </tbody>
                 </table>
             </div>
