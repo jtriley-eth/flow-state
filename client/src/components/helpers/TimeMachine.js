@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import '../../styles/helpers/TimeMachine.css'
 import {
     AreaChart,
@@ -8,139 +8,19 @@ import {
     Tooltip
 } from 'recharts'
 import { connect } from 'react-redux'
-
-const data = [
-    {
-      name: "Page A",
-      balance: 4000
-    },
-    {
-      name: "Page B",
-      balance: 3000
-    },
-    {
-      name: "Page C",
-      balance: 2000
-    },
-    {
-      name: "Page D",
-      balance: 2780
-    },
-    {
-      name: "Page E",
-      balance: 1890
-    },
-    {
-      name: "Page F",
-      balance: 2390
-    },
-    {
-      name: "Page G",
-      balance: 3490
-    }
-]
+import { getChartData } from '../../constants/timestuff'
 
 const TimeMachine = props => {
-    // const { startTIme, endTime, tokenSymbol } = props
-    const { events, account /*startTime, endTime*/ } = props.user
-    const tokenSymbol = 'fDAIx'
-    console.log(events)
-    const startTime = 1624060264
+    const { startTime, endTime, tokenSymbol } = props
+    const { events, account } = props.user
 
-    const getChartData = () => {
-        let startBalance = 0
-        let activeFlows = []
-
-        // Spaghetti Code of The Century :)
-        events.forEach(event => {
-            const { timestamp, note } = event
-
-            // MUST match token symbol
-            if (event.token.symbol === tokenSymbol) {
-
-                // Calculate Starting Balance
-                if (timestamp < startTime) {
-
-                    if (note === 'Token Upgrade') {
-                        console.log('token upgrade', event.amount * 10e-19)
-                        startBalance += event.amount
-
-                    } else if (note === 'Token Downgrade') {
-                        startBalance -= event.amount
-
-                    } else if (note === 'Stream Start') {
-                        console.log('stream start')
-                        activeFlows.push({
-                            flowRate: event.newFlowRate,
-                            receiver: event.receiver,
-                            sender: event.sender,
-                            sumRecorded: 0,
-                            timestamp: event.timestamp
-                        })
-
-                    } else if (note === 'Stream End') {
-                        activeFlows.filter(flow => !(
-                            flow.flowRate === event.oldFlowRate &&
-                            flow.sender === event.sender &&
-                            flow.receiver === event.receiver
-                        ))
-
-                        if (account === event.sender) {
-                            startBalance -= event.sum
-                        } else {
-                            startBalance += event.sum
-                        }
-
-                    } else if (note === 'Stream Update') {
-                        const index = activeFlows.findIndex(flow => {
-                            return (
-                                flow.flowRate === event.oldFlowRate &&
-                                flow.sender === event.sender &&
-                                flow.receiver === event.receiver
-                            )
-                        })
-                        if (typeof activeFlows[index] !== 'undefined') {
-                            if (account === event.sender) {
-                                startBalance -= (event.sum - activeFlows[index].sumRecorded)
-                                activeFlows[index].sumRecorded += event.sum
-                            } else {
-                                startBalance += (event.sum - activeFlows[index].sumRecorded)
-                                activeFlows[index].sumRecorded += event.sum
-                            }
-                        }
-
-                    }
-                }
-            }
-        })
-
-        if (activeFlows.length !== 0) {
-            activeFlows.forEach(flow => {
-                const balanceChange = ((startTime - flow.timestamp) * flow.flowRate)
-                console.log('flow.timestamp', flow.timestamp)
-                console.log('startTime', startTime)
-                console.log('flow.flowRate', flow.flowRate)
-                if (flow.receiver === account) {
-                    startBalance += balanceChange
-                } else if (flow.sender === account) {
-                    startBalance -= balanceChange
-                }
-            })
-        }
-        return startBalance * 10e-19
-    }
-
-    useEffect(() => {
-        console.log('data', getChartData())
-    // eslint-disable-next-line
-    }, [])
-
+    const chartData = getChartData(events, startTime, endTime, tokenSymbol, account)
     return (
         <div className='timemachine'>
             <AreaChart
-                width={500}
+                width={600}
                 height={400}
-                data={data}
+                data={chartData}
                 className='timemachine-chart'
             >
                 <defs>
@@ -163,7 +43,10 @@ const TimeMachine = props => {
                         />
                     </linearGradient>
                 </defs>
-                <XAxis stroke='#d0d0d0' />
+                <XAxis
+                    stroke='#d0d0d0'
+                    tick={false}
+                    />
                 <YAxis stroke='#d0d0d0' />
                 <Tooltip
                     contentStyle={{ background: '#303030', borderRadius: 4 }}

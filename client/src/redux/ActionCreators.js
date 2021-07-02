@@ -176,7 +176,7 @@ const _getEvents = async address => {
 
                     if (event.oldFlowRate === '0') {
                         note = 'Stream Start'
-                    } else if (event.newFlowRate === '0') {
+                    } else if (event.flowRate === '0') {
                         note = 'Stream Stop'
                     } else {
                         note = 'Stream Update'
@@ -203,7 +203,7 @@ const _getEvents = async address => {
 
                     if (event.oldFlowRate === '0') {
                         note = 'Stream Start'
-                    } else if (event.newFlowRate === '0') {
+                    } else if (event.flowRate === '0') {
                         note = 'Stream Stop'
                     } else {
                         note = 'Stream Update'
@@ -242,7 +242,7 @@ const _getEvents = async address => {
             }))
             events = events.concat(downEvents)
 
-            events.sort((a, b) => b.timestamp - a.timestamp)
+            events.sort((a, b) => a.timestamp - b.timestamp)
 
             return events
         })

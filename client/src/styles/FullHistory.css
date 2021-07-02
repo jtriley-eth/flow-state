@@ -26,3 +26,16 @@
 .full-history-card {
     width: 300px;
 }
+
+.fullhistory-balances {
+    padding: 0 8px 8px;
+    margin: 16px 0;
+    border: 1px solid #888;
+    border-radius: 4px;
+    color: #D57DFF;
+}
+
+.fullhistory-balances-label {
+    margin-top: 8px;
+    color: #f0f0f0;
+}

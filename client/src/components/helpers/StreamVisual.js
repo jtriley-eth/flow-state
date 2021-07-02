@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 const StreamVisual = ({ lastUpdate, flowRate, inFlow, sum, className='' }) => {
-    const [time, setTime] = useState(Math.floor(new Date().getTime() / 100))
+    const [time, setTime] = useState(Math.floor(Date.now() / 100))
     setTimeout(() => setTime(time + 1), 100)
     return (
         <span className={className}>

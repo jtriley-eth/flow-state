@@ -91,6 +91,19 @@
     padding: 8px;
 }
 
+.checkout-button {
+    width: 100%;
+    margin-top: 16px;
+}
+
+.checkout-button-text {
+    color: #f0f0f0;
+}
+
+.checkout-button:hover .checkout-button-text {
+    color: #f0f0f0;
+}
+
 @keyframes fade-up-in {
     0% {
         transform: translateY(12px);

@@ -137,6 +137,11 @@ const Checkout = props => {
                                 </span>
                             </p>
                         </div>
+                        <button className='button checkout-button'>
+                            <p className='button-text checkout-button-text'>
+                                Create Stream!
+                            </p>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -146,24 +151,3 @@ const Checkout = props => {
 
 const mapStateToProps = state => ({ user: state.user })
 export default connect(mapStateToProps, null)(Checkout)
-
-/*
-
-                    <h3 className='checkout-subheader'>Recipient</h3>
-                    <div className='checkout-address-container'>
-                        <div className='checkout-card'>
-                            <Blockies
-                                seed={receiver}
-                                size={8}
-                                scale={4}
-                                className='identicon'
-                            />
-                            <input
-                                className='input checkout-address-input'
-                                onChange={e => setReceiver(e.target.value.toLowerCase())}
-                                value={receiver}
-                                placeholder='0x...'
-                            />
-                        </div>
-                    </div>
-*/

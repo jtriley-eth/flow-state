@@ -49,29 +49,32 @@ main {
 }
 
 .button {
+    background-color: #00000000;
     padding: 8px;
-    background: linear-gradient(225deg, #7DB1FF, #D57DFF);
     border: none;
     border-radius: 4px;
-    transition: box-shadow 0.2s, transform 0.2s;
+    border: 2px solid #D57DFFa8;
+    transition: box-shadow 0.2s, border 0.2s;
+}
+
+.button-text {
+    color: #D57DFFa8;
+    font-weight: bold;
 }
 
 .button:hover {
-    box-shadow: 2px 2px 2px #000;
-    transform: translateY(-2px);
+    border: 2px solid #D57DFF;
+    box-shadow: 
+        0 0 4px #D57DFF,
+        inset 0 0 4px #D57DFF;
+}
+
+.button:hover .button-text {
+    color: #D57DFF;
 }
 
 .button:focus {
     outline: none;
-}
-
-.button:active {
-    animation: click 0.1s;
-}
-
-.button-text {
-    color: #303030;
-    font-weight: bold;
 }
 
 .loader {
@@ -115,6 +118,10 @@ main {
     -moz-appearance: textfield;
 }
 
+.input::-webkit-calendar-picker-indicator {
+    background-color: #D57DFF;
+    border-radius: 4px;
+}
 .select {
     background-color: #383838;
     font-family: 'Roboto Mono', monospace;
@@ -154,6 +161,7 @@ main {
     text-align: center;
     padding: 8px;
     border-left: 1px solid #888;
+    font-size: 0.8em;
 }
 
 .th:first-child {
@@ -189,12 +197,5 @@ main {
     }
     100%{
         transform: rotateZ(-720deg) scale(1, 1);
-    }
-}
-
-@keyframes click {
-    to {
-        transform: translateY(-0);
-        box-shadow: 0 0 0 #000;
     }
 }

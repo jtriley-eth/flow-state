@@ -25,7 +25,7 @@ const Navbar = props => {
                     <div className='nav-button'>
                         <button className='button'>
                             <Link
-                                className='nav-button-text'
+                                className='button-text nav-button-text'
                                 to='/checkout'
                             >New Flow</Link>
                         </button>

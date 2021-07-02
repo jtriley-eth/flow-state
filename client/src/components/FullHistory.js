@@ -1,10 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import TimeMachine from './helpers/TimeMachine'
+import { getTimestampBalance } from '../constants/timestuff'
 import '../styles/FullHistory.css'
 
 const FullHistory = props => {
-    const { events } = props.user
+    const [startTime, setStartTime] = useState(Math.floor(Date.now() / 1000) - 604800)
+    const [endTime, setEndTime] = useState(Math.floor(Date.now() / 1000))
+    const [tokenSymbol, setTokenSymbol] = useState('fDAIx')
+    const { events, account } = props.user
+
+    const relevantEvents = events.filter(event => {
+        const { timestamp, token } = event
+        return (
+            timestamp >= startTime &&
+            timestamp <= endTime &&
+            token.symbol === tokenSymbol
+        )
+    })
+
+    const formatTimestamp = timestamp => {
+        return new Date(timestamp * 1000).toISOString().substring(0,19)
+    }
+
+    const timestampHandler = ISOString => {
+        return Math.floor(new Date(ISOString).valueOf() / 1000)
+    }
 
     const shortAddr = address => {
         const start = address.substring(0, 5)
@@ -15,7 +36,9 @@ const FullHistory = props => {
     const getDate = timestamp => {
         const jsTimestamp = new Date(timestamp * 1000)
         return (
-            `${jsTimestamp.getDate()} ${jsTimestamp.toLocaleString('default', { month: 'short' })}, ${jsTimestamp.getFullYear()}`
+            `${jsTimestamp.getDate()}
+            ${jsTimestamp.toLocaleString('default', { month: 'short' })},
+            ${jsTimestamp.getFullYear()}`
         )
     }
 
@@ -25,22 +48,55 @@ const FullHistory = props => {
                 <h2 className='fullhistory-h2'>Full History</h2>
             </div>
             <div className='full-history-content'>
-                    <TimeMachine events={events} />
+                    <TimeMachine
+                        events={events}
+                        startTime={startTime}
+                        endTime={endTime}
+                        tokenSymbol={tokenSymbol}
+                    />
                 <div className='card full-history-card'>
                     <div className='card-header'>
                         <h3>Time Machine</h3>
                     </div>
                     <div>
                         <div>
-                            <p>Start Timestamp</p>
-                            <input className='input' />
-
+                            <p>Start Date-Time</p>
+                            <input
+                                className='input'
+                                type='datetime-local'
+                                value={formatTimestamp(startTime)}
+                                onChange={e => {
+                                    const ISOString = e.target.value
+                                    setStartTime(timestampHandler(ISOString))
+                                }}
+                            />
                         </div>
                         <div>
-                            <p>End Timestamp</p>
-                            <input className='input' />
+                            <p>End Date-Time</p>
+                            <input
+                                className='input'
+                                type='datetime-local'
+                                value={formatTimestamp(endTime)}
+                                onChange={e => {
+                                    const ISOString = e.target.value
+                                    setEndTime(timestampHandler(ISOString))
+                                }}
+                            />
                         </div>
-
+                        <div>
+                            <p>Token Symbol</p>
+                            <input
+                                className='input'
+                                value={tokenSymbol}
+                                onChange={e => setTokenSymbol(e.target.value)}
+                            />
+                        </div>
+                        <div className='fullhistory-balances'>
+                            <p className='fullhistory-balances-label'>Starting Balance:</p>
+                            <p>{getTimestampBalance(events, startTime, tokenSymbol, account)}</p>
+                            <p className='fullhistory-balances-label'>End Balance:</p>
+                            <p>{getTimestampBalance(events, endTime, tokenSymbol, account)}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -60,8 +116,8 @@ const FullHistory = props => {
                     </thead>
                     <tbody>
                         {
-                            events.length > 0 ?
-                            events.map((event, index) => {
+                            relevantEvents.length > 0 ?
+                            relevantEvents.map((event, index) => {
                                 const isFlow = event.type === 'flow'
                                 const isUpgrade = event.type === 'upgrade'
                                 return (
