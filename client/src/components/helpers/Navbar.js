@@ -24,7 +24,10 @@ const Navbar = props => {
                 user.account ?
                     <div className='nav-button'>
                         <button className='button'>
-                            <p className='button-text'>New Flow</p>
+                            <Link
+                                className='nav-button-text'
+                                to='/checkout'
+                            >New Flow</Link>
                         </button>
                     </div>
                 :

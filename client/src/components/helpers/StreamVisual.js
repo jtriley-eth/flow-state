@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 
-const StreamVisual = ({ lastUpdate, flowRate, className, inFlow, sum }) => {
-    const [time, setTime] = useState(Math.floor(new Date().getTime() / 1000))
-    setTimeout(() => setTime(time + 1), 1000)
+const StreamVisual = ({ lastUpdate, flowRate, inFlow, sum, className='' }) => {
+    const [time, setTime] = useState(Math.floor(new Date().getTime() / 100))
+    setTimeout(() => setTime(time + 1), 100)
     return (
         <span className={className}>
             {inFlow ? '' : '-'}
-            {((time - lastUpdate) * (flowRate * 10e-18) + sum)}
+            {(((time - (lastUpdate * 10)) * (flowRate * 10e-20)) + (sum * 10e-20)).toFixed(8)}
         </span>
     )
 }

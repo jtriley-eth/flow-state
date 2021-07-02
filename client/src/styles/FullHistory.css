@@ -1,0 +1,28 @@
+.fullhistory {
+    min-height: calc(100vh - 72px);
+    width: 100%;
+}
+
+.fullhistory-header {
+    margin: 0 16px;
+    padding: 16px;
+    border-bottom: 2px solid #888;
+}
+
+.fullhistory-h2 {
+    font-size: 1.6em;
+}
+
+.fullhistory-table-wrapper {
+    overflow: scroll;
+}
+
+.full-history-content {
+    margin: 16px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.full-history-card {
+    width: 300px;
+}

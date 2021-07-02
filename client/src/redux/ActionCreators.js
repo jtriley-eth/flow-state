@@ -18,7 +18,10 @@ const _getFlows = async address => {
     const query = `
     query {
         account(id: "${address}") {
-            flowsOwned (orderBy: lastUpdate) {
+            flowsOwned (
+                orderBy: lastUpdate
+                orderDirection: desc
+            ) {
                 id
                 sum
                 flowRate
@@ -35,7 +38,10 @@ const _getFlows = async address => {
                     id
                 }
             }
-            flowsReceived (orderBy: lastUpdate) {
+            flowsReceived (
+                orderBy: lastUpdate
+                orderDirection: desc
+            ) {
                 id
                 sum
                 flowRate
@@ -80,7 +86,7 @@ const _getEvents = async address => {
     const query = `
     query {
         account(id: "${address}") {
-            flowsOwned (orderBy: lastUpdate) {
+            flowsOwned {
                 sum
                 token {
                     name
@@ -101,7 +107,7 @@ const _getEvents = async address => {
                     id
                 }
             }
-            flowsReceived (orderBy: lastUpdate) {
+            flowsReceived {
                 sum
                 token {
                     name
@@ -165,50 +171,78 @@ const _getEvents = async address => {
             let events = []
 
             flowsOwned.forEach(flow => {
-                const flowEvents = flow.events.map(event => ({
-                    type: 'flow',
-                    sum: event.sum,
-                    timestamp: event.transaction.timestamp,
-                    oldFlowRate: event.oldFlowRate,
-                    newFlowRate: event.flowRate,
-                    token: flow.token,
-                    sender: flow.owner.id,
-                    receiver: flow.recipient.id
-                }))
+                const flowEvents = flow.events.map(event => {
+                    let note = ''
+
+                    if (event.oldFlowRate === '0') {
+                        note = 'Stream Start'
+                    } else if (event.newFlowRate === '0') {
+                        note = 'Stream Stop'
+                    } else {
+                        note = 'Stream Update'
+                    }
+
+                    return {
+                        type: 'flow',
+                        sum: parseInt(flow.sum),
+                        timestamp: parseInt(event.transaction.timestamp),
+                        oldFlowRate: parseInt(event.oldFlowRate),
+                        newFlowRate: parseInt(event.flowRate),
+                        token: flow.token,
+                        sender: flow.owner.id,
+                        receiver: flow.recipient.id,
+                        note: note
+                    }
+                })
                 events = events.concat(flowEvents)
             })
 
             flowsReceived.forEach(flow => {
-                const flowEvents = flow.events.map(event => ({
-                    type: 'flow',
-                    sum: event.sum,
-                    timestamp: event.transaction.timestamp,
-                    oldFlowRate: event.oldFlowRate,
-                    newFlowRate: event.flowRate,
-                    token: flow.token,
-                    sender: flow.owner.id,
-                    receiver: flow.recipient.id
-                }))
+                const flowEvents = flow.events.map(event => {
+                    let note = ''
+
+                    if (event.oldFlowRate === '0') {
+                        note = 'Stream Start'
+                    } else if (event.newFlowRate === '0') {
+                        note = 'Stream Stop'
+                    } else {
+                        note = 'Stream Update'
+                    }
+
+                    return {
+                        type: 'flow',
+                        sum: parseInt(event.sum),
+                        timestamp: parseInt(event.transaction.timestamp),
+                        oldFlowRate: parseInt(event.oldFlowRate),
+                        newFlowRate: parseInt(event.flowRate),
+                        token: flow.token,
+                        sender: flow.owner.id,
+                        receiver: flow.recipient.id,
+                        note: note
+                    }
+                })
                 events = events.concat(flowEvents)
             })
 
             const upEvents = upgradeEvents.map(event => ({
                 type: 'upgrade',
-                amount: event.amount,
-                timestamp: event.transaction.timestamp,
-                token: event.token
+                amount: parseInt(event.amount),
+                timestamp: parseInt(event.transaction.timestamp),
+                token: event.token,
+                note: 'Token Upgrade'
             }))
             events = events.concat(upEvents)
 
             const downEvents = downgradeEvents.map(event => ({
                 type: 'downgrade',
-                amount: event.amount,
-                timestamp: event.transcation.timestamp,
-                token: event.token
+                amount: parseInt(event.amount),
+                timestamp: parseInt(event.transaction.timestamp),
+                token: event.token,
+                note: 'Token Downgrade'
             }))
             events = events.concat(downEvents)
 
-            events.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp))
+            events.sort((a, b) => b.timestamp - a.timestamp)
 
             return events
         })
@@ -228,6 +262,12 @@ export const getUser = () => dispatch => {
         }
     })
 }
+
+export const setCustomUser = address => dispatch => {
+    const account = address.toLowerCase()
+    dispatch({ type: ActionTypes.SET_USER, payload: account })
+}
+
 
 export const getFlows = address => dispatch => {
     _getFlows(address).then(flows => {

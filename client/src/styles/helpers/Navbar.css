@@ -19,7 +19,7 @@
 .nav-logo {
     width: 48px;
     margin-right: 16px;
-    transition: transform 0.5s;
+    transition: transform 0.75s;
 }
 
 .nav-button {
@@ -30,5 +30,11 @@
 }
 
 .nav-brand:hover .nav-logo {
-    transform: rotateZ(-360deg);
+    transform: rotateZ(-540deg);
+}
+
+.nav-button-text {
+    font-weight: bold;
+    text-decoration: none;
+    color: #303030;
 }

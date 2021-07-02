@@ -1,10 +1,9 @@
 import React from 'react'
-import '../../styles/helpers/History.css'
-// import Loader from './Loader'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import TimeMachine from './helpers/TimeMachine'
+import '../styles/FullHistory.css'
 
-const History = props => {
+const FullHistory = props => {
     const { events } = props.user
 
     const shortAddr = address => {
@@ -21,17 +20,31 @@ const History = props => {
     }
 
     return (
-        <div className='history'>
-            <div className='history-header'>
-                <h2>History</h2>
-                <Link
-                    className='history-link'
-                    to='/history'
-                >
-                    Full History
-                </Link>
+        <div className='fullhistory'>
+            <div className='fullhistory-header'>
+                <h2 className='fullhistory-h2'>Full History</h2>
             </div>
-            <div>
+            <div className='full-history-content'>
+                    <TimeMachine events={events} />
+                <div className='card full-history-card'>
+                    <div className='card-header'>
+                        <h3>Time Machine</h3>
+                    </div>
+                    <div>
+                        <div>
+                            <p>Start Timestamp</p>
+                            <input className='input' />
+
+                        </div>
+                        <div>
+                            <p>End Timestamp</p>
+                            <input className='input' />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div className='fullhistory-table-wrapper'>
                 <table className='table'>
                     <thead>
                         <tr className='thead-r'>
@@ -47,8 +60,8 @@ const History = props => {
                     </thead>
                     <tbody>
                         {
-                            events ?
-                            events.slice(0, 5).map((event, index) => {
+                            events.length > 0 ?
+                            events.map((event, index) => {
                                 const isFlow = event.type === 'flow'
                                 const isUpgrade = event.type === 'upgrade'
                                 return (
@@ -97,10 +110,9 @@ const History = props => {
                 </table>
             </div>
         </div>
-
     )
 }
 
-const mapStateToProps = state => ({ user: state.user })
+const mapStateToProps = state => ({ user: state.user})
 
-export default connect(mapStateToProps, null)(History)
+export default connect(mapStateToProps, null)(FullHistory)
