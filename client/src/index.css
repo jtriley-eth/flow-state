@@ -50,9 +50,9 @@ main {
 
 .button {
     padding: 8px;
-    background-color: #9889FF;
+    background: linear-gradient(225deg, #7DB1FF, #D57DFF);
     border: none;
-    border-radius: 2px;
+    border-radius: 4px;
     transition: box-shadow 0.2s, transform 0.2s;
 }
 
@@ -65,6 +65,10 @@ main {
     outline: none;
 }
 
+.button:active {
+    animation: click 0.1s;
+}
+
 .button-text {
     color: #303030;
     font-weight: bold;
@@ -73,6 +77,107 @@ main {
 .loader {
     animation: load 3.5s linear infinite;
     width: 128px;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.input {
+    padding: 4px 8px;
+    margin: 8px 0;
+    border-radius: 4px;
+    background-color: #00000000;
+    border: 2px solid #D57DFFa8;
+    color: #f0f0f0;
+    font-family: 'Roboto Mono', monospace;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.input:focus {
+    outline: none;
+    border: 2px solid #D57DFF;
+    box-shadow: 
+        0 0 4px #D57DFF,
+        inset 0 0 4px #D57DFF;
+}
+
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.select {
+    background-color: #383838;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1em;
+    border: none;
+    color: #f0f0f0;
+    border-bottom: 2px solid #D57DFFa8;
+    padding: 4px 0;
+    transition: border-bottom 0.2s;
+}
+
+.select:focus {
+    outline: none;
+    border-bottom: 2px solid #D57DFF;
+
+}
+
+.table {
+    border-collapse: collapse;
+    width: calc(100% - 32px);
+    margin: 16px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 4px 4px 4px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+}
+
+.th {
+    background-color: #9889FF;
+    color: #303030;
+    padding: 8px 16px;
+    border-left: 1px solid #303030;
+}
+
+.td {
+    color: #f0f0f0;
+    text-align: center;
+    padding: 8px;
+    border-left: 1px solid #888;
+}
+
+.th:first-child {
+    border: none;
+}
+
+.td:first-child {
+    border: none;
+}
+
+.flow-td {
+    background-color: #D57DFF18;
+}
+
+.grade-td {
+    background-color: #9889FF18;
+}
+
+.tbody-r {
+    background-color: #383838;
+}
+
+.tbody-r:nth-child(even) {
+    background-color: #404040;
 }
 
 @keyframes load {
@@ -84,5 +189,12 @@ main {
     }
     100%{
         transform: rotateZ(-720deg) scale(1, 1);
+    }
+}
+
+@keyframes click {
+    to {
+        transform: translateY(-0);
+        box-shadow: 0 0 0 #000;
     }
 }

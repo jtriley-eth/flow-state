@@ -17,14 +17,17 @@ const Navbar = props => {
                 :
                     null
             }
-            <Link to='/' className='nav-brand'>
+            <Link to='/' className='nav-brand noselect'>
                 <img src={Logo} alt='logo' className='nav-logo'/>
             </Link>
             {
                 user.account ?
                     <div className='nav-button'>
                         <button className='button'>
-                            <p className='button-text'>New Flow</p>
+                            <Link
+                                className='nav-button-text'
+                                to='/checkout'
+                            >New Flow</Link>
                         </button>
                     </div>
                 :

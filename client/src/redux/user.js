@@ -1,7 +1,12 @@
 import * as ActionTypes from './ActionTypes'
 
 const initialState = {
-    account: ''
+    account: '',
+    flows: {
+        outFlows: [],
+        inFlows: []
+    },
+    events: []
 }
 
 export const user = (state = initialState, action) => {
@@ -11,6 +16,20 @@ export const user = (state = initialState, action) => {
                 ...state,
                 error: null,
                 account: action.payload
+            })
+        
+        case ActionTypes.GET_FLOWS:
+            return ({
+                ...state,
+                error: null,
+                flows: action.payload
+            })
+
+        case ActionTypes.GET_EVENTS:
+            return ({
+                ...state,
+                error: null,
+                events: action.payload
             })
 
         case ActionTypes.SET_ERROR:

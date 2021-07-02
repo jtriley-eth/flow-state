@@ -49,6 +49,7 @@ const FlowListItem = props => {
                         transform: `rotateZ(${collapsed ? '0' : '180deg'})`,
                         transition: 'transform 0.5s'
                     }}
+                    className='noselect'
                     onClick={() => setCollapsed(!collapsed)}
                 />
             </div>
@@ -74,6 +75,7 @@ const FlowListItem = props => {
                             flowRate={flow.flowRate}
                             className='flows-item-data'
                             inFlow={inFlow}
+                            sum={flow.sum}
                         />
                     </p>
                 </div>
@@ -83,7 +85,7 @@ const FlowListItem = props => {
 }
 
 const Flows = props => {
-    const { flows } = props.flows
+    const { flows } = props.user
     const inFlows = flows.inFlows.filter(flow => flow.flowRate !== '0')
     const outFlows = flows.outFlows.filter(flow => flow.flowRate !== '0')
     return (
@@ -134,8 +136,7 @@ const Flows = props => {
 }
 
 const mapStateToProps = state => ({
-    user: state.user,
-    flows: state.flows
+    user: state.user
 })
 
 export default connect(mapStateToProps, null)(Flows)
