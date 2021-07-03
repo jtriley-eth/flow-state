@@ -31,6 +31,15 @@ export const user = (state = initialState, action) => {
                 error: null,
                 events: action.payload
             })
+        
+        case ActionTypes.ADD_FLOW:
+            return ({
+                ...state,
+                error: null,
+                flows: {
+                    outFlows: state.flows.outFlows.concat(action.payload)
+                }
+            })
 
         case ActionTypes.SET_ERROR:
             return ({

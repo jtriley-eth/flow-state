@@ -4,7 +4,7 @@ import Flows from './helpers/Flows'
 import History from './helpers/History'
 import '../styles/Main.css'
 
-const Main = props => {
+const Main = () => {
 
     return (
         <div className='main'>

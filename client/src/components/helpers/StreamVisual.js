@@ -6,7 +6,7 @@ const StreamVisual = ({ lastUpdate, flowRate, inFlow, sum, className='' }) => {
     return (
         <span className={className}>
             {inFlow ? '' : '-'}
-            {(((time - (lastUpdate * 10)) * (flowRate * 10e-20)) + (sum * 10e-20)).toFixed(8)}
+            {(((time - (lastUpdate * 10)) * (flowRate * 1e-19)) + (sum * 1e-19)).toFixed(8)}
         </span>
     )
 }

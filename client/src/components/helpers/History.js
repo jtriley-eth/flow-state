@@ -51,6 +51,12 @@ const History = props => {
                             events.slice(0, 5).map((event, index) => {
                                 const isFlow = event.type === 'flow'
                                 const isUpgrade = event.type === 'upgrade'
+                                const isReceived = event.type === 'received'
+                                const chartAmount =
+                                    isFlow ?
+                                    '-'
+                                    :
+                                    (isUpgrade || isReceived ? event.amount * 1e-18 : `-${event.amount * 1e-18}`)
                                 return (
                                     <tr key={index.toString()} className='tbody-r'>
                                         <td className='td'>
@@ -69,13 +75,13 @@ const History = props => {
                                             {isFlow ? shortAddr(event.receiver) : '-'}
                                         </td>
                                         <td className='td flow-td'>
-                                            {isFlow ? event.oldFlowRate * 10e-18 : '-'}
+                                            {isFlow ? event.oldFlowRate * 1e-18 : '-'}
                                         </td>
                                         <td className='td flow-td'>
-                                            {isFlow ? event.newFlowRate * 10e-18 : '-'}
+                                            {isFlow ? event.newFlowRate * 1e-18 : '-'}
                                         </td>
                                         <td className='td grade-td'>
-                                            {isFlow ? '-' : (isUpgrade ? event.amount * 10e-18 : `-${event.amount}`)}
+                                            {chartAmount}
                                         </td>
                                     </tr>
                                 )

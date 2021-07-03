@@ -59,13 +59,13 @@ const FlowListItem = props => {
                     <p className='flows-item-label'>
                         Token:
                         <span className='flows-item-data'>
-                            {flow.token.name}
+                            {flow.token.symbol}
                         </span>
                     </p>
                     <p className='flows-item-label'>
                         Flow Rate:
                         <span className='flows-item-data'>
-                            {flow.flowRate * 10e-18} {flow.token.symbol}/ Second
+                            {flow.flowRate * 1e-18} {flow.token.symbol}/ Second
                         </span>
                     </p>
                     <p className='flows-item-label'>
@@ -86,6 +86,7 @@ const FlowListItem = props => {
 
 const Flows = props => {
     const { flows } = props.user
+    console.log(flows)
     const inFlows = flows.inFlows.filter(flow => flow.flowRate !== '0')
     const outFlows = flows.outFlows.filter(flow => flow.flowRate !== '0')
     return (

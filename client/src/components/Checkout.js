@@ -2,27 +2,28 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import Blockies from 'react-blockies'
 import '../styles/Checkout.css'
+import { Redirect } from 'react-router-dom'
+import search from '../assets/search.svg'
+import { superfluidGoerliUrl } from '../constants/thegraph'
+import { ApolloClient, gql, InMemoryCache } from '@apollo/client'
+import { createFlow } from '../redux/ActionCreators'
 
 const Checkout = props => {
+    const [redirect, setRedirect] = useState(false)
     const [receiver, setReceiver] = useState('')
     const [flowRate, setFlowRate] = useState(0)
     const [perSecond, setPerSecond] = useState(0)
     const [perDay, setPerDay] = useState(0)
     const [perYear, setPerYear] = useState(0)
     const [unit, setUnit] = useState(1)
-    const { user } = props
+    const [tokenSymbol, setTokenSymbol] = useState('')
+    const [tokenID, setTokenID] = useState('')
+    const [searchError, setSearchError] = useState('')
+    const { user, createFlow } = props
 
     const secondsInDay = 86400
     const secondsInYear = 3.154e7
     const daysInYear = 365
-
-    const flowRateHandler = rate => {
-        if (rate === '') {
-            setFlowRate(0)
-        } else {
-            setFlowRate(parseInt(rate))
-        }
-    }
 
     useEffect(() => {
         if (unit === 1) {
@@ -39,6 +40,63 @@ const Checkout = props => {
             setPerYear(flowRate)
         }
     },[flowRate, unit])
+
+    const flowRateHandler = rate => {
+        if (rate === '') {
+            setFlowRate(0)
+        } else {
+            setFlowRate(parseInt(rate))
+        }
+    }
+
+    const createStreamHandler = () => {
+        createFlow(receiver, tokenSymbol, tokenID, perSecond)
+        setRedirect(true)
+    }
+
+    const queryTheGraph = async symbol => {
+        const query = `
+        query {
+            tokens(where: { symbol: "${symbol}" }) {
+                id
+            }
+        }
+        `
+        const client = new ApolloClient({
+            uri: superfluidGoerliUrl,
+            cache: new InMemoryCache()
+        })
+
+        return client.query({ query: gql(query) })
+            .then(data => {
+                const { tokens } = data.data
+                if (tokens.length > 0) {
+                    return tokens[0].id
+                } else {
+                    return ''
+                }
+            })
+            .catch(error => console.log(error))
+    }
+
+    const searchHandler = () => {
+        setSearchError('')
+        if (tokenSymbol !== '') {
+            queryTheGraph(tokenSymbol)
+                .then(id => {
+                    if (id !== '') {
+                        setTokenID(id)
+                    } else {
+                        setSearchError('Token Not Found!')
+                    }
+                })
+                .catch(error => console.log(error))
+        }
+    }
+
+    if (redirect) {
+        return <Redirect to='/confirming' />
+    }
 
     return (
         <div className='checkout'>
@@ -75,6 +133,43 @@ const Checkout = props => {
                             placeholder='0x...'
                             autoComplete='off'
                         />
+                        <h3 className='checkout-subheader'>Super Token</h3>
+                        <p>Search Symbol</p>
+                        <div className='checkout-rate-group'>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center'
+                            }}>
+                                <input
+                                    className='input'
+                                    value={tokenSymbol}
+                                    onChange={e => setTokenSymbol(e.target.value)}
+                                    placeholder='fDAIx'
+                                    autoComplete='off'
+                                />
+                                <button
+                                    className='checkout-search'
+                                    onClick={() => searchHandler()}
+                                >
+                                    <img src={search} alt='search' width={16} />
+                                </button>
+                                <p
+                                    className='error'
+                                    style={{ marginLeft: 8 }}
+                                >{searchError}</p>
+                            </div>
+                        </div>
+                        <p style={{ margin: '8px 0 16px' }}>or</p>
+                        <p>Token ID</p>
+                        <div className='checkout-rate-group'>
+                            <input
+                                className='input checkout-address-input'
+                                placeHolder='0x...'
+                                autoComplete='off'
+                                value={tokenID}
+                                onChange={e => setTokenID(e.target.value)}
+                            />
+                        </div>
                         <h3 className='checkout-subheader'>Transfer Rate</h3>
                         <div className='checkout-rate-group'>
                             <input
@@ -137,7 +232,10 @@ const Checkout = props => {
                                 </span>
                             </p>
                         </div>
-                        <button className='button checkout-button'>
+                        <button
+                            className='button checkout-button'
+                            onClick={() => createStreamHandler()}
+                        >
                             <p className='button-text checkout-button-text'>
                                 Create Stream!
                             </p>
@@ -150,4 +248,6 @@ const Checkout = props => {
 }
 
 const mapStateToProps = state => ({ user: state.user })
-export default connect(mapStateToProps, null)(Checkout)
+const mapDispatchToProps = { createFlow }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout)

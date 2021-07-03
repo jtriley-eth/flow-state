@@ -78,8 +78,8 @@ main {
 }
 
 .loader {
+    transform: scaleX(-1);
     animation: load 3.5s linear infinite;
-    width: 128px;
 }
 
 .noselect {
@@ -122,6 +122,7 @@ main {
     background-color: #D57DFF;
     border-radius: 4px;
 }
+
 .select {
     background-color: #383838;
     font-family: 'Roboto Mono', monospace;
@@ -136,7 +137,11 @@ main {
 .select:focus {
     outline: none;
     border-bottom: 2px solid #D57DFF;
+}
 
+.error {
+    color: #FF8D7D;
+    font-size: 0.8em;
 }
 
 .table {

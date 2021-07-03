@@ -1,8 +1,8 @@
 import * as ActionTypes from './ActionTypes'
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 import { superfluidGoerliUrl } from '../constants/thegraph'
-// import SuperfluidSDK from '@superfluid-finance/js-sdk'
-// import { Web3Provider } from '@ethersproject/providers'
+import SuperfluidSDK from '@superfluid-finance/js-sdk'
+import { Web3Provider } from '@ethersproject/providers'
 
 const _getAddress = async () => {
     if (typeof window.ethereum !== 'undefined') {
@@ -29,7 +29,6 @@ const _getFlows = async address => {
                 token {
                     name
                     symbol
-                    underlyingAddress
                 }
                 owner {
                     id
@@ -49,7 +48,6 @@ const _getFlows = async address => {
                 token {
                     name
                     symbol
-                    underlyingAddress
                 }
                 owner {
                     id
@@ -91,7 +89,6 @@ const _getEvents = async address => {
                 token {
                     name
                     symbol
-                    underlyingAddress
                 }
                 events {
                     oldFlowRate
@@ -112,7 +109,6 @@ const _getEvents = async address => {
                 token {
                     name
                     symbol
-                    underlyingAddress
                 }
                 events {
                     oldFlowRate
@@ -128,26 +124,22 @@ const _getEvents = async address => {
                     id
                 }
             }
-            upgradeEvents {
-                amount
-                transaction {
-                    timestamp
-                }
+            accountWithToken {
                 token {
                     name
                     symbol
-                    underlyingAddress
                 }
-            }
-            downgradeEvents {
-                amount
-                transaction {
-                    timestamp
+                transferEventsReceived {
+                    transaction {
+                        timestamp
+                    }
+                    value
                 }
-                token {
-                    name
-                    symbol
-                    underlyingAddress
+                transferEventsSent {
+                    transaction {
+                        timestamp
+                    }
+                    value
                 }
             }
         }
@@ -164,8 +156,7 @@ const _getEvents = async address => {
             const {
                 flowsOwned,
                 flowsReceived,
-                upgradeEvents,
-                downgradeEvents
+                accountWithToken
             } = data.data.account
 
             let events = []
@@ -224,32 +215,84 @@ const _getEvents = async address => {
                 events = events.concat(flowEvents)
             })
 
-            const upEvents = upgradeEvents.map(event => ({
-                type: 'upgrade',
-                amount: parseInt(event.amount),
-                timestamp: parseInt(event.transaction.timestamp),
-                token: event.token,
-                note: 'Token Upgrade'
-            }))
-            events = events.concat(upEvents)
+            accountWithToken.forEach(account => {
+                const transfersSent = account.transferEventsSent.map(transfer => {
+                    return ({
+                        type: 'sent',
+                        amount: parseInt(transfer.value),
+                        timestamp: parseInt(transfer.transaction.timestamp),
+                        token: account.token,
+                        note: 'Transfer Sent'
+                    })
+                })
+                events = events.concat(transfersSent)
+                
+                const transfersReceived = account.transferEventsReceived.map(transfer => {
+                    return ({
+                        type: 'received',
+                        amount: parseInt(transfer.value),
+                        timestamp: parseInt(transfer.transaction.timestamp),
+                        token: account.token,
+                        note: 'Transfer Received'
+                    })
+                })
+                events = events.concat(transfersReceived)
 
-            const downEvents = downgradeEvents.map(event => ({
-                type: 'downgrade',
-                amount: parseInt(event.amount),
-                timestamp: parseInt(event.transaction.timestamp),
-                token: event.token,
-                note: 'Token Downgrade'
-            }))
-            events = events.concat(downEvents)
+            })
 
             events.sort((a, b) => a.timestamp - b.timestamp)
-
             return events
         })
         .catch(error => {
             console.log(error)
             return []
         })
+}
+
+const _createFlow = async (recipient, superTokenSymbol, superToken, flowRate) => {
+    console.log('_createFlow')
+    try {
+        const flowRateString = (flowRate * 1e18).toString()
+        const sf = new SuperfluidSDK.Framework({
+            ethers: new Web3Provider(window.ethereum)
+        })
+        await sf.initialize()
+    
+        // ALWAYS request
+        const walletAddress = await window.ethereum.request({
+            method: 'eth_requestAccounts',
+            params: [{ eth_accounts: {} }]
+        })
+    
+        const user = sf.user({
+            address: walletAddress[0],
+            token: superToken
+        })
+    
+        await user.flow({
+            recipient,
+            flowRate: flowRateString
+        })
+        console.log('returning')
+        return ({
+            flowRate: flowRateString,
+            lastUpdate: Date.now().toString(),
+            owner: {
+                id: walletAddress[0]
+            },
+            recipient: {
+                id: recipient
+            },
+            sum: '0',
+            token: {
+                symbol: superTokenSymbol
+            }
+        })
+
+    } catch (error) {
+        console.log(error)
+        return null
+    }
 }
 
 export const getUser = () => dispatch => {
@@ -278,6 +321,16 @@ export const getFlows = address => dispatch => {
 export const getEvents = address => dispatch => {
     _getEvents(address).then(events => {
         dispatch({ type: ActionTypes.GET_EVENTS, payload: events })
+    })
+}
+
+export const createFlow = (recipient, superTokenSymbol, superToken, flowRate) => dispatch => {
+    console.log('createFlow')
+    _createFlow(recipient, superTokenSymbol, superToken, flowRate).then(result => {
+        if (result !== null) {
+            console.log('result', result)
+            dispatch({ type: ActionTypes.ADD_FLOW, payload: result })
+        }
     })
 }
 

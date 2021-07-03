@@ -52,7 +52,7 @@ export const getTimestampBalance = (
     snapshotTimestamp,
     tokenSymbol,
     account,
-    decimals=10e-19
+    decimals=1e-18
 ) => {
     let balance = 0
     let activeFlows = []
@@ -67,10 +67,10 @@ export const getTimestampBalance = (
             // Calculate Starting Balance
             if (timestamp < snapshotTimestamp) {
 
-                if (note === 'Token Upgrade') {
+                if (note === 'Transfer Received') {
                     balance += event.amount
 
-                } else if (note === 'Token Downgrade') {
+                } else if (note === 'Transfer Sent') {
                     balance -= event.amount
 
                 } else if (note === 'Stream Start') {
@@ -130,6 +130,5 @@ export const getTimestampBalance = (
             }
         })
     }
-    console.log(balance)
     return balance * decimals
 }

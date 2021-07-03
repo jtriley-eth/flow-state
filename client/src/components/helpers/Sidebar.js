@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getTimestampBalance, getNetFlowRate, getLastUpdate } from '../../constants/timestuff'
+import { getTimestampBalance, getNetFlowRate } from '../../constants/timestuff'
 import BalanceVisual from './BalanceVisual'
 import '../../styles/helpers/Sidebar.css'
 

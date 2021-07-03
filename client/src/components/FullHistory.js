@@ -5,10 +5,16 @@ import { getTimestampBalance } from '../constants/timestuff'
 import '../styles/FullHistory.css'
 
 const FullHistory = props => {
-    const [startTime, setStartTime] = useState(Math.floor(Date.now() / 1000) - 604800)
+    const { events, account } = props.user
+    console.log(events)
+    const [startTime, setStartTime] = useState(
+        events.length > 0 ?
+        events[0].timestamp
+        :
+        Math.floor(Date.now() / 1000) - 604800
+    )
     const [endTime, setEndTime] = useState(Math.floor(Date.now() / 1000))
     const [tokenSymbol, setTokenSymbol] = useState('fDAIx')
-    const { events, account } = props.user
 
     const relevantEvents = events.filter(event => {
         const { timestamp, token } = event
@@ -120,6 +126,12 @@ const FullHistory = props => {
                             relevantEvents.map((event, index) => {
                                 const isFlow = event.type === 'flow'
                                 const isUpgrade = event.type === 'upgrade'
+                                const isReceived = event.type === 'received'
+                                const chartAmount =
+                                    isFlow ?
+                                    '-'
+                                    :
+                                    (isUpgrade || isReceived ? event.amount * 1e-18 : `-${event.amount * 1e-18}`)
                                 return (
                                     <tr key={index.toString()} className='tbody-r'>
                                         <td className='td'>
@@ -138,13 +150,13 @@ const FullHistory = props => {
                                             {isFlow ? shortAddr(event.receiver) : '-'}
                                         </td>
                                         <td className='td flow-td'>
-                                            {isFlow ? event.oldFlowRate * 10e-18 : '-'}
+                                            {isFlow ? event.oldFlowRate * 1e-18 : '-'}
                                         </td>
                                         <td className='td flow-td'>
-                                            {isFlow ? event.newFlowRate * 10e-18 : '-'}
+                                            {isFlow ? event.newFlowRate * 1e-18 : '-'}
                                         </td>
                                         <td className='td grade-td'>
-                                            {isFlow ? '-' : (isUpgrade ? event.amount * 10e-18 : `-${event.amount}`)}
+                                            {chartAmount}
                                         </td>
                                     </tr>
                                 )

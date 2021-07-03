@@ -9,6 +9,7 @@ import Main from './components/Main'
 import FullHistory from './components/FullHistory'
 import Auth from './components/Auth'
 import Checkout from './components/Checkout'
+import ConfirmVisual from './components/ConfirmVisual'
 
 const App = props => {
     const { user, getFlows, getEvents } = props
@@ -42,6 +43,9 @@ const App = props => {
                             </Route>
                             <Route path='/checkout' exact>
                                 <Checkout />
+                            </Route>
+                            <Route path='/confirming' exact>
+                                <ConfirmVisual />
                             </Route>
                             {
                                 user.account ? <Sidebar showMenu={showMenu} /> : null
