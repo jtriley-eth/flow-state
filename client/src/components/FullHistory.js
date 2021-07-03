@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import TimeMachine from './helpers/TimeMachine'
 import { getTimestampBalance } from '../constants/timestuff'
@@ -6,15 +6,15 @@ import '../styles/FullHistory.css'
 
 const FullHistory = props => {
     const { events, account } = props.user
-    console.log(events)
-    const [startTime, setStartTime] = useState(
-        events.length > 0 ?
-        events[0].timestamp
-        :
-        Math.floor(Date.now() / 1000) - 604800
-    )
+    const [startTime, setStartTime] = useState(Math.floor(Date.now() / 1000) - 604800)
     const [endTime, setEndTime] = useState(Math.floor(Date.now() / 1000))
     const [tokenSymbol, setTokenSymbol] = useState('fDAIx')
+
+    useEffect(() => {
+        if (events.length > 0) {
+            setStartTime(events[0].timestamp)
+        }
+    },[events])
 
     const relevantEvents = events.filter(event => {
         const { timestamp, token } = event

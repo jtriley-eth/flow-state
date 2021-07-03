@@ -26,7 +26,7 @@ export const getChartData = (
         balance: getTimestampBalance(events, startTime, tokenSymbol, account)
     })
     const interval = (endTime - startTime) / 18
-    for (let iterator = 0; iterator < 18; iterator++) {
+    for (let iterator = 1; iterator < 19; iterator++) {
         const intervalTimestamp = (interval * iterator) + startTime
         chartData.push({
             label: intervalTimestamp.toString(),
@@ -43,7 +43,6 @@ export const getChartData = (
         label: endTime.toString(),
         balance: getTimestampBalance(events, endTime, tokenSymbol, account)
     })
-
     return chartData
 }
 
@@ -55,78 +54,92 @@ export const getTimestampBalance = (
     decimals=1e-18
 ) => {
     let balance = 0
-    let activeFlows = []
-
+    let flows = []
+    
     // Spaghetti Code of The Century :)
     events.forEach(event => {
-        const { timestamp, note } = event
 
         // MUST match token symbol
         if (event.token.symbol === tokenSymbol) {
 
             // Calculate Starting Balance
-            if (timestamp < snapshotTimestamp) {
+            if (event.timestamp < snapshotTimestamp) {
 
-                if (note === 'Transfer Received') {
+                if (event.note === 'Transfer Received') {
                     balance += event.amount
 
-                } else if (note === 'Transfer Sent') {
+                } else if (event.note === 'Transfer Sent') {
                     balance -= event.amount
 
-                } else if (note === 'Stream Start') {
-                    activeFlows.push({
-                        flowRate: event.newFlowRate,
-                        receiver: event.receiver,
-                        sender: event.sender,
-                        sumRecorded: 0,
-                        timestamp
-                    })
-
-                } else if (note === 'Stream Stop') {
-                    activeFlows = activeFlows.filter(flow => {
-                        return !(
-                            flow.flowRate === event.oldFlowRate &&
+                } else if (event.note === 'Stream Start') {
+                    const index = flows.findIndex(flow => {
+                        return (
                             flow.sender === event.sender &&
                             flow.receiver === event.receiver
                         )
                     })
-
-                    if (account === event.sender) {
-                        balance -= event.sum
+                    if (index === -1) {
+                        flows.push({
+                            flowRate: event.newFlowRate,
+                            receiver: event.receiver,
+                            sender: event.sender,
+                            active: true,
+                            timestamp: event.timestamp
+                        })
                     } else {
-                        balance += event.sum
+                        flows[index].active = true
+                        flows[index].timestamp = event.timestamp
+                        flows[index].flowRate = event.newFlowRate
                     }
 
-                } else if (note === 'Stream Update') {
-                    const index = activeFlows.findIndex(flow => {
+                } else if (event.note === 'Stream Stop') {
+                    const index = flows.findIndex(flow => {
+                        return (
+                            flow.sender === event.sender &&
+                            flow.receiver === event.receiver &&
+                            flow.flowRate === event.oldFlowRate
+                        )
+                    })
+                    const intermediateSum = (flows[index].timestamp - event.timestamp) * event.oldFlowRate
+
+                    if (account === event.sender) {
+                        balance -= (intermediateSum)
+                    } else {
+                        balance += (intermediateSum)
+                    }
+
+                    flows[index].active = false
+
+                } else if (event.note === 'Stream Update') {
+                    const index = flows.findIndex(flow => {
                         return (
                             flow.flowRate === event.oldFlowRate &&
                             flow.sender === event.sender &&
                             flow.receiver === event.receiver
                         )
                     })
-                    if (typeof activeFlows[index] !== 'undefined') {
+                    if (typeof flows[index] !== 'undefined') {
                         if (account === event.sender) {
-                            balance -= (event.sum - activeFlows[index].sumRecorded)
-                            activeFlows[index].sumRecorded += event.sum
+                            balance -= (event.sum - flows[index].sumRecorded)
                         } else {
-                            balance += (event.sum - activeFlows[index].sumRecorded)
-                            activeFlows[index].sumRecorded += event.sum
+                            balance += (event.sum - flows[index].sumRecorded)
                         }
+                        flows[index].sumRecorded += event.sum
                     }
-
                 }
             }
         }
     })
 
-    if (activeFlows.length !== 0) {
-        activeFlows.forEach(flow => {
-            const balanceChange = ((snapshotTimestamp - flow.timestamp) * flow.flowRate)
-            if (flow.receiver === account) {
-                balance += balanceChange
-            } else if (flow.sender === account) {
-                balance -= balanceChange
+    if (flows.length !== 0) {
+        flows.forEach(flow => {
+            if (flow.active) {
+                const balanceChange = ((snapshotTimestamp - flow.timestamp) * flow.flowRate)
+                if (flow.receiver === account) {
+                    balance += balanceChange
+                } else if (flow.sender === account) {
+                    balance -= balanceChange
+                }
             }
         })
     }
