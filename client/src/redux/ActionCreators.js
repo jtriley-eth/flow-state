@@ -202,7 +202,7 @@ const _getEvents = async address => {
 
                     return {
                         type: 'flow',
-                        sum: parseInt(event.sum),
+                        sum: parseInt(flow.sum),
                         timestamp: parseInt(event.transaction.timestamp),
                         oldFlowRate: parseInt(event.oldFlowRate),
                         newFlowRate: parseInt(event.flowRate),

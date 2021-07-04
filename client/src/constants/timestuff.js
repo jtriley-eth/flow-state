@@ -100,7 +100,7 @@ export const getTimestampBalance = (
                             flow.flowRate === event.oldFlowRate
                         )
                     })
-                    const intermediateSum = (flows[index].timestamp - event.timestamp) * event.oldFlowRate
+                    const intermediateSum = (event.timestamp - flows[index].timestamp) * event.oldFlowRate
 
                     if (account === event.sender) {
                         balance -= (intermediateSum)
