@@ -17,7 +17,7 @@ const Main = () => {
                 </div>
             </section>
             <section className='main-section bottom'>
-                <div className='card main-card'>
+                <div className='card main-card' id='history-card'>
                     <History />
                 </div>
             </section>

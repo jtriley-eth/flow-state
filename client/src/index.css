@@ -24,6 +24,7 @@ body {
 main {
     min-height: calc(100vh - 72px);
     display: flex;
+    background: linear-gradient(135deg, #202020, #7DB1FF18, #202020);
 }
 
 .card {

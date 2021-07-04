@@ -268,7 +268,7 @@ const _createFlow = async (recipient, superTokenSymbol, superToken, flowRate) =>
             address: walletAddress[0],
             token: superToken
         })
-    
+
         await user.flow({
             recipient,
             flowRate: flowRateString

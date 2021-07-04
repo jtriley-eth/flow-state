@@ -1,5 +1,6 @@
 .history {
     overflow: scroll;
+    height: 240px;
 }
 
 .history-header {
@@ -19,4 +20,10 @@
 .history-link:hover {
     color: #D57DFF;
     border-bottom: 1px solid #D57DFF;
+}
+
+.table-wrapper {
+    display: flex;
+    align-items: center;
+    height: 100%;
 }

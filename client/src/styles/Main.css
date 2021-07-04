@@ -1,34 +1,36 @@
 .main {
     flex: 1;
-    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .main-section {
     box-sizing: border-box;
-}
-
-.main-section.top {
-    height: fit-content;
-    min-height: 50vh;
+    flex: 1;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     flex-wrap: wrap;
 }
 
+.main-section.top {
+    height: fit-content;
+}
+
 .main-card {
     flex: 1;
     min-width: 500px;
-    min-height: 300px;
+    min-height: 320px;
     box-sizing: border-box;
-    margin: 16px;
+    margin: 0 16px;
     animation: fade-up-in 1s ease-in;
 }
 
 #flows-card {
-    max-height: 300px;
+    max-height: 320px;
     overflow: scroll;
 }
+
 
 @keyframes fade-up-in {
     0% {
