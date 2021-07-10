@@ -13,7 +13,6 @@ import ConfirmVisual from './components/ConfirmVisual'
 
 const App = props => {
     const { user, getFlows, getEvents } = props
-    console.log(user)
     const [showMenu, setShowMenu] = useState(false)
     const toggleMenu = () => setShowMenu(!showMenu)
 

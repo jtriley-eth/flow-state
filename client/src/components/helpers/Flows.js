@@ -86,7 +86,6 @@ const FlowListItem = props => {
 
 const Flows = props => {
     const { flows } = props.user
-    console.log(flows)
     const inFlows = flows.inFlows.filter(flow => flow.flowRate !== '0')
     const outFlows = flows.outFlows.filter(flow => flow.flowRate !== '0')
     return (
