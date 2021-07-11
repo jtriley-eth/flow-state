@@ -1,0 +1,20 @@
+{
+    "light": {
+        "text": "#202020",
+        "error": "red",
+        "base": "#C1CED6",
+        "low": "#CAD7E0",
+        "mid": "#D3E1EB",
+        "high": "#DCEBF5",
+        "veryHigh": "#E6F5FF"
+    },
+    "dark": {
+        "text": "#202020",
+        "error": "red",
+        "base": "#00121F",
+        "low": "#001F33",
+        "mid": "#002B47",
+        "high": "#002E4D",
+        "veryHigh": "#003A61"
+    }
+}

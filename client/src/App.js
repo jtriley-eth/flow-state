@@ -12,6 +12,7 @@ import Checkout from './components/Checkout'
 import ConfirmVisual from './components/ConfirmVisual'
 
 const App = props => {
+    console.log(props)
     const { user, getFlows, getEvents } = props
     const [showMenu, setShowMenu] = useState(false)
     const toggleMenu = () => setShowMenu(!showMenu)
