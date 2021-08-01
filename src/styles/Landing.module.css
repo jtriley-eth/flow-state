@@ -1,0 +1,49 @@
+.screen {
+	flex: 1;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.canvas {
+	position: absolute;
+	top: 0;
+	height: 100%;
+	width: 100%;
+}
+
+.card {
+	z-index: 1;
+	backdrop-filter: blur(2px);
+	width: 300px;
+}
+
+.options {
+}
+
+.orContainer {
+	border-top: 2px solid #888;
+	margin-top: 32px;
+	display: flex;
+	justify-content: center;
+}
+
+.or {
+	width: fit-content;
+	transform: translateY(-0.75em);
+	padding: 0 16px;
+}
+
+.form {
+	width: 100%;
+	margin: 8px 0;
+}
+
+.switchContainer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 16px 0;
+}

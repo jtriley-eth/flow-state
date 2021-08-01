@@ -1,0 +1,61 @@
+.header {
+	width: 100vw;
+	box-sizing: border-box;
+	padding: 12px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+	z-index: 2;
+}
+
+.brand {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+}
+
+.logo {
+	width: 48px;
+	margin-right: 16px;
+	transition: transform 0.75s;
+}
+
+.brand:hover .logo {
+	transform: rotateZ(-540deg);
+}
+
+.switchContainer {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.switch {
+	width: 52px;
+	height: 28px;
+	padding: 2px;
+	box-sizing: border-box;
+	border-radius: 99px;
+	box-shadow: inset 2px 2px 2px rgba(0, 0, 0, 0.5),
+		inset -2px -2px 2px rgba(255, 255, 255, 0.1);
+}
+
+.switchSlider {
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	transition: transform 0.5s;
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5),
+		-1px -1px 1px rgba(255, 255, 255, 0.1);
+	z-index: 2;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.switchIcon {
+	width: 16px;
+	height: 16px;
+}

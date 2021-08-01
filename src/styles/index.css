@@ -1,0 +1,29 @@
+/*
+COLOR SCHEME
+
+primary: #D57DFF
+secondary: #7DB1FF
+ternary: #9889FF
+highlight: #7DFFC0
+error: #FF8D7D
+
+*/
+
+* {
+	margin: 0;
+	padding: 0;
+	font-family: 'Nunito', sans-serif;
+	transition: color 0.2s, background-color 0.2s;
+	/*font-family: 'Nova Mono', monospace;*/
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+main {
+	min-height: calc(100vh - 72px);
+	display: flex;
+}

@@ -1,0 +1,45 @@
+.card {
+	border-top: 1px solid #888;
+	border-right: 1px solid #484848;
+	border-bottom: 1px solid #484848;
+	border-left: 1px solid #888;
+	box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+	border-radius: 4px;
+	padding: 8px;
+}
+
+.cardHeader {
+	padding-bottom: 8px;
+	margin-bottom: 8px;
+	border-bottom: 2px solid #888;
+}
+
+.input {
+	width: 100%;
+	padding: 4px;
+	box-sizing: border-box;
+	border: 2px solid #9889ff;
+	border-radius: 4px;
+	background: #00000000;
+}
+
+.input:focus {
+	outline: none;
+	box-shadow: 0px 0px 2px rgba(152, 137, 255),
+		inset 0px 0px 2px rgba(152, 137, 255);
+}
+
+.button {
+	background: #9889ff;
+	border-radius: 4px;
+	padding: 8px;
+	transition: border 0.2s, box-shadow 0.2s;
+	margin-top: 16px;
+	color: #202020;
+	text-align: center;
+	font-weight: bold;
+}
+
+.button:hover {
+	box-shadow: 0px 0px 4px rgba(152, 137, 255);
+}

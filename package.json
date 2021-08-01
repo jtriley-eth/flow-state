@@ -1,0 +1,70 @@
+{
+	"name": "flow-state",
+	"version": "0.1.0",
+	"repository": "https://github.com/JoshuaTrujillo15/flow-state.git",
+	"license": "MIT",
+	"dependencies": {
+		"@apollo/client": "^3.3.21",
+		"@react-three/fiber": "^7.0.5",
+		"@reduxjs/toolkit": "^1.6.0",
+		"@testing-library/jest-dom": "^5.11.4",
+		"@testing-library/react": "^11.1.0",
+		"@testing-library/user-event": "^12.1.10",
+		"bn.js": "^5.2.0",
+		"ethers": "^5.4.1",
+		"graphql": "^15.5.1",
+		"js-big-decimal": "^1.3.4",
+		"react": "^17.0.2",
+		"react-blockies": "^1.4.1",
+		"react-dom": "^17.0.2",
+		"react-redux": "^7.2.4",
+		"react-router-dom": "^5.2.0",
+		"react-scripts": "4.0.3",
+		"recharts": "^2.0.9",
+		"redux": "^4.1.0",
+		"redux-logger": "^3.0.6",
+		"redux-persist": "^6.0.0",
+		"redux-thunk": "^2.3.0",
+		"three": "^0.130.1",
+		"web-vitals": "^1.0.1"
+	},
+	"devDependencies": {
+		"@types/bn.js": "^5.1.0",
+		"@types/jest": "^26.0.15",
+		"@types/node": "^12.0.0",
+		"@types/react": "^17.0.0",
+		"@types/react-dom": "^17.0.0",
+		"@types/react-router-dom": "^5.1.8",
+		"@types/redux-logger": "^3.0.9",
+		"@types/three": "^0.130.0",
+		"typescript": "^4.1.2",
+		"typescript-plugin-css-modules": "^3.4.0",
+		"husky": "^7.0.0",
+		"pretty-quick": "^3.1.1"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"prepare": "husky install"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	}
+}

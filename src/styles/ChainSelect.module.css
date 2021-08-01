@@ -1,0 +1,15 @@
+.screen {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.content {
+	width: 350px;
+	padding: 8px 0;
+}
+
+.form {
+	margin: 16px 0;
+}
